@@ -3,12 +3,24 @@ const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 
-//Connect to the SQLite database
-const db = new sqlite3.Database('./database.sqlite', (err) => {
+//Path to the database file
+const dbPath = path.resolve(__dirname, 'database.sqlite');
+
+//Connect to the SQLite database, initializes it if it doesn't exist
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Could not connect to database', err);
     } else {
         console.log('Connected to the SQLite database');
+        db.run(`CREATE TABLE IF NOT EXISTS greetings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            message TEXT NOT NULL
+            )`, (err) => {
+                if (err) {
+                    console.error('Could not create table', err);
+                }
+            });
     }
 });
 
@@ -29,6 +41,7 @@ app.get('/api/greet/:name', (req, res) => {
     db.run('INSERT INTO greetings (name, message) VALUES (?, ?)', [name, message], (err) => {
         if (err) {
             return console.error('Could not insert greeting', err);
+                            //return res.status(500).json({ error: err.message });
         }
         console.log('Greeting inserted into database');
         //You can view the database by running this in the console:
@@ -42,7 +55,7 @@ app.get('/api/greet/:name', (req, res) => {
 
 //Define an API endpoint that retrieves all greetings
 app.get('/api/greetings', (req, res) => {
-    db.all('SELECT * FROM greetings', [], (err, rows) => {
+    db.all('SELECT name, message FROM greetings', [], (err, rows) => {
         if(err) {
             res.status(500).json({ error: err.message });
             return;
@@ -60,5 +73,5 @@ app.get('/api/greetings', (req, res) => {
 //Start the server on port 3000
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on port ${port}`);
 });

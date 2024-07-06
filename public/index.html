@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html land="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First Web Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+
+    <p>This is my first web page.</p>
+
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <button onclick="displayGreeting()">Greet Me</button>
+    <p id="greetingMessage"></p>
+    <h2>All Greetings:</h2>
+    <u1 id="greetingsList"></u1>
+
+    <script>
+
+        //Fetch the greeting message from the API
+        async function fetchGreeting(name) {
+            const response = await fetch(`/api/greet/${name}`);
+            const data = await response.json();
+            return data.message;
+        }
+
+        //Display the greeting message
+        async function displayGreeting() {
+            const nameInput = document.getElementById('nameInput').value;
+            const greetingMessage = await fetchGreeting(nameInput);
+            document.getElementById('greetingMessage').innerText = greetingMessage;
+            await loadGreetings(); //Ensure greetings are loaded right after displaying a new one
+        }
+
+        //Fetch all greetings from the API
+        async function fetchGreetings() {
+            const response = await fetch('/api/greetings');
+            const data = await response.json();
+            //Return the greetings (rows object) from the json object
+            return data.greetings;
+        }
+
+        //Load and display all greetings
+        async function loadGreetings() {
+            //Fetch greetings and find the list object
+            const greetings = await fetchGreetings();
+            const greetingsList = document.getElementById('greetingsList');
+            //Wipe the list
+            greetingsList.innerHTML = '';
+            //For each item (called greeting), create a new list item and append it to the list
+            greetings.forEach(greeting => {
+                const listItem = document.createElement('li');
+                listItem.innerText = `${greeting.name}: ${greeting.message}`;
+                greetingsList.appendChild(listItem);
+            });
+        }
+
+        //Load greetings when the page loads
+        window.onload = loadGreetings;
+
+        // //This is a comment
+        // console.log('Hello, World!');
+
+        // //Variables
+        // let message = 'Welcome to JavaScript!';
+        // console.log(message);
+
+        // //Functions
+        // function greet(name) {
+        //     return 'Hello, ' + name + '!';
+        // }
+
+        // console.log(greet('Name'));
+        
+        // function displayGreeting() {
+        //     let nameInput = document.getElementById('nameInput').value;
+        //     let greetingMessage = greet(nameInput);
+        //     document.getElementById('greetingMessage').innerText = greetingMessage;
+        // }
+
+    </script>
+
+</body>
+
+</html>

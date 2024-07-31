@@ -17,14 +17,14 @@ app.use(bodyParser.json());
 
 // Configure sessions
 app.use(session({
-    secret: 'your_secret_key',
+    secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false } // Set secure: true if using HTTPS
 }));
 
 //Path to the database file
-const dbPath = path.resolve(__dirname, 'database.sqlite');
+const dbPath = process.env.DATABASE_PATH || path.resolve(__dirname, 'database.sqlite');
 
 //Connect to the SQLite database, initializes it if it doesn't exist
 const db = new sqlite3.Database(dbPath, (err) => {
@@ -53,6 +53,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     }
 });
 
+// Middleware to protect routes
 function requireLogin(req, res, next) {
     if (!req.session.userId) {
         return res.status(401).json({ message: 'You must be logged in to access this resource'});

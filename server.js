@@ -110,7 +110,6 @@ app.post('/api/login', (req, res) => {
                 console.log('User: ' + username + ' logged in successfully');
                 res.status(200).json({ message: 'Logged in successfully' });
             } else {
-                console.log('Invalid password');
                 res.status(401).json({ message: 'Invalid credentials' });
             }
         });

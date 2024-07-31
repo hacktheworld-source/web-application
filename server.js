@@ -8,6 +8,9 @@ const path = require('path');
 const bodyParser = require('body-parser'); // Body parsing middleware
 require('dotenv').config();
 
+// TODO: Page doesn't seem to remember past login credentials after re-loading, 
+// but will not allow you to use a repeat username to register...
+
 const app = express();
 const port = process.env.PORT || 3000; //Start the server on port 3000
 
@@ -107,6 +110,7 @@ app.post('/api/login', (req, res) => {
                 console.log('User: ' + username + ' logged in successfully');
                 res.status(200).json({ message: 'Logged in successfully' });
             } else {
+                console.log('Invalid password');
                 res.status(401).json({ message: 'Invalid credentials' });
             }
         });

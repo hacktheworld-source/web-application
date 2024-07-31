@@ -1,15 +1,16 @@
 const express = require('express');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
-const app = express();
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+const bodyParser = require('body-parser'); // Body parsing middleware
+require('dotenv').config();
 
-//Path to the database file
-const dbPath = path.resolve(__dirname, 'database.sqlite');
+const app = express();
+const port = process.env.PORT || 3000; //Start the server on port 3000
 
-// Body parsing middleware
-const bodyParser = require('body-parser');
+//Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure body parser to handle JSON requests
 app.use(bodyParser.json());
@@ -21,6 +22,9 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } // Set secure: true if using HTTPS
 }));
+
+//Path to the database file
+const dbPath = path.resolve(__dirname, 'database.sqlite');
 
 //Connect to the SQLite database, initializes it if it doesn't exist
 const db = new sqlite3.Database(dbPath, (err) => {
@@ -112,8 +116,6 @@ app.post('/api/logout', (req, res) => {
     });
 });
 
-//Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
 
 //Define a route for the homepage
 app.get('/', requireLogin, (req, res) => {
@@ -158,8 +160,6 @@ app.get('/api/greetings', requireLogin, (req, res) => {
 //     res.json({ message: `Hello, ${name}!` });
 // });
 
-//Start the server on port 3000
-const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

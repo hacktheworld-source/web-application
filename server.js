@@ -1,6 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const Redis = require('ioredis');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bodyParser = require('body-parser'); // Body parsing middleware
@@ -15,8 +17,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configure body parser to handle JSON requests
 app.use(bodyParser.json());
 
+// Configure Redis client
+const redisClient = new Redis(process.env.REDIS_URL);
+
 // Configure sessions
 app.use(session({
+    store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
     saveUninitialized: true,

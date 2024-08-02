@@ -23,7 +23,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 // Configure Redis client
-const redisClient = new Redis(process.env.REDIS_URL);
+let redisClient
+try {
+    redisClient = new Redis(process.env.REDIS_URL);
+
+    redisClient.on('error', (err) => {
+        console.error('Redis error:', err);
+        redisClient = null;
+    });
+} catch(err) {
+    console.error("Could not connect to Redis URL: ", err);
+    redisClient = null;
+}
 
 // Configure sessions
 app.use(session({

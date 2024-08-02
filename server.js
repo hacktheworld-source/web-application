@@ -176,12 +176,11 @@ app.get('/api/greet/:name', requireLogin, (req, res) => {
 
 //Define an API endpoint that retrieves all greetings
 app.get('/api/greetings', requireLogin, (req, res) => {
-    db.all('SELECT name, message FROM greetings', [], (err, rows) => {
+    db.all('SELECT * FROM greetings', [], (err, rows) => {
         if(err) {
             res.status(500).json({ error: err.message });
-            return;
         }
-        res.json({ greetings: rows });
+        res.json({ rows });
     });
 });
 

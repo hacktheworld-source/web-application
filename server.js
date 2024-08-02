@@ -77,6 +77,15 @@ app.post('/api/register', (req, res) => {
     const { username, password } = req.body;
     const saltRounds = 10;
 
+    db.get('SELECT * FROM users WHERE username = ?', [username], (err, user) => {
+        if(err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if(user.name == username) {
+            return res.status(401).json({ message: 'Username already exists' });
+        }
+    });
+
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
             return res.status(500).json({ error: err.message });

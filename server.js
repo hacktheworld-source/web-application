@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
-const RedisStore = require('connect-redis').default;
+const RedisStore = require('connect-redis').default; // Redis to replace storing in memory
 const Redis = require('ioredis');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
@@ -10,6 +10,8 @@ require('dotenv').config();
 
 // TODO: Page doesn't seem to remember past login credentials after re-loading, 
 // but will not allow you to use a repeat username to register...
+//  Solved. Deleted and re-creted the database. Turns out my version of Redis 
+//  online isn't persistent.
 
 const app = express();
 const port = process.env.PORT || 3000; //Start the server on port 3000
@@ -25,7 +27,7 @@ const redisClient = new Redis(process.env.REDIS_URL);
 
 // Configure sessions
 app.use(session({
-    store: new RedisStore({ client: redisClient }),
+    store: new RedisStore({ client: redisClient }), // To replace storing in memory
     secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
     saveUninitialized: true,
@@ -164,11 +166,17 @@ app.get('/api/greetings', requireLogin, (req, res) => {
     });
 });
 
-// //Define an API endpoint that returns a greeting message
+// //OLD: Define an API endpoint that returns a greeting message
 // app.get('/api/greet/:name', (req, res) => {
 //     const name = req.params.name;
 //     res.json({ message: `Hello, ${name}!` });
 // });
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong! Please try again later.'});
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

@@ -26,11 +26,15 @@
 
     <p>This is my first web page.</p>
 
-    <input type="text" id="nameInput" placeholder="Enter your name">
-    <button onclick="displayGreeting()">Greet Me</button>
-    <p id="greetingMessage"></p>
+    <h2>Greetings</h2>
+    <form id="greetForm">
+        <input type="text" id="greetInput" placeholder="Enter your name" required>
+        <button type="submit">Greet Me</button>
+    </form>
+    
+    <p id="greetMessage"></p>
     <h2>All Greetings:</h2>
-    <u1 id="greetingsList"></u1>
+    <u1 id="greetList"></u1>
 
     <h2>Register</h2>
     <form id="registerForm">
@@ -51,6 +55,10 @@
     <script src="scripts.js"></script>
 
     <p id="message"></p>
+
+    <!--
+
+    // Old scripts. New scripts are held in scripts.js
 
     <script>
 
@@ -81,7 +89,7 @@
         async function loadGreetings() {
             //Fetch greetings and find the list object
             const greetings = await fetchGreetings();
-            const greetingsList = document.getElementById('greetingsList');
+            const greetingsList = document.getElementById('greetList');
             //Wipe the list
             greetingsList.innerHTML = '';
             //For each item (called greeting), create a new list item and append it to the list
@@ -116,6 +124,7 @@
         // }
 
     </script>
+    -->
 
 </body>
 

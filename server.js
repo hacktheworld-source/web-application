@@ -82,7 +82,7 @@ app.post('/api/register', (req, res) => {
         if(err) {
             return res.status(500).json({ error: err.message });
         }
-        if(user.name == username) {
+        if(user) {
             return res.status(400).json({ message: 'Username already taken' });
         }
 

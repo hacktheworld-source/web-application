@@ -5,19 +5,31 @@ function displayMessage(message) {
 }
 
 // Event to register a user through API form submission
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+document.getElementById('registerForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
     const username = document.getElementById('registerUsername').value;
     const password = document.getElementById('registerPassword').value;
 
-    const response = await fetch('/api/register', {
+    fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
+    })
+    .then(response => {
+        if(!response.ok) {
+            return response.json().then(error => {
+                throw new Error(error.message);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        displayMessage(data.message)
+    })
+    .catch(error => {
+        displayMessage(error.message)
     });
-
-    const result = await response.json();
-    displayMessage(result.message);
 });
 
 // Event to login user through API form submission

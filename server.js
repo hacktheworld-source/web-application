@@ -178,9 +178,9 @@ app.get('/api/greet/:name', requireLogin, (req, res) => {
 app.get('/api/greetings', requireLogin, (req, res) => {
     db.all('SELECT * FROM greetings', [], (err, rows) => {
         if(err) {
-            res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: err.message });
         }
-        res.json({ rows });
+        res.status(200).json(rows);
     });
 });
 

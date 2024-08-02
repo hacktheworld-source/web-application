@@ -6,6 +6,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -13,6 +14,7 @@ body {
 
 .container {
     background: #fff;
+    margin: 0;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -44,12 +46,21 @@ input[type="text"]::placeholder {
     font-style: italic;
 }
 
+button {
+    padding: 4px 8px;
+    background-color: #fff;
+    color: #333;
+    border-radius: 3px;
+    border-style: ridge;
+}
+
 button:hover {
     background-color: #0c1568;
+    color: #fff;
 }
 
 p {
-    margin: 10 px 0;
+    margin: 10px 0;
     font-size: 14px;
 }
 

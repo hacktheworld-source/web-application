@@ -129,10 +129,27 @@ app.post('/api/logout', (req, res) => {
 });
 
 
-//Define a route for the homepage
+// Define a route for the homepage
 app.get('/', requireLogin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+// Define a route to handle greeting submission
+app.post('/api/greet', requireLogin, (req, res) => {
+    const { name } = req.body;
+    const message = `Hello, ${name}!`;
+
+    db.run('INSERT INTO greetings (name, message) VALUES (?, ?)', [name, message], (err) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.status(201).json({ message });
+    });
+});
+
+/*
+
+OLD. New uses app.post
 
 //Define an API endpoint that returns a greeting message
 app.get('/api/greet/:name', requireLogin, (req, res) => {
@@ -154,6 +171,8 @@ app.get('/api/greet/:name', requireLogin, (req, res) => {
     res.json({ message: message });
 
 });
+
+*/
 
 //Define an API endpoint that retrieves all greetings
 app.get('/api/greetings', requireLogin, (req, res) => {

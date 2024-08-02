@@ -77,25 +77,26 @@ app.post('/api/register', (req, res) => {
     const { username, password } = req.body;
     const saltRounds = 10;
 
+    // Check if username already exists
     db.get('SELECT * FROM users WHERE username = ?', [username], (err, user) => {
         if(err) {
             return res.status(500).json({ error: err.message });
         }
         if(user.name == username) {
-            return res.status(401).json({ message: 'Username already exists' });
+            return res.status(400).json({ message: 'Username already taken' });
         }
-    });
 
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hash], (err) => {
+        bcrypt.hash(password, saltRounds, (err, hash) => {
             if (err) {
-                return  res.status(500).json({ error: err.message });
+                return res.status(500).json({ error: err.message });
             }
-            console.log('User registered into database');
-            res.status(201).json({ message: 'User registered successfully' });
+            db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hash], (err) => {
+                if (err) {
+                    return  res.status(500).json({ error: err.message });
+                }
+                console.log('User registered into database');
+                res.status(201).json({ message: 'User registered successfully' });
+            });
         });
     });
 });

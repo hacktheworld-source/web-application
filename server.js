@@ -71,16 +71,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 // Middleware to protect routes
 function requireLogin(req, res, next) {
-    //Print all users in database (temporary)
-    db.run('SELECT * FROM users', (err, users) => {
-        if(users) {
-            console.log("Users from database:")
-            users.forEach(user => {
-                console.log(user['username'], user['password']);
-            });
-        }
-    });
-
     if (!req.session.userId) {
         return res.status(401).json({ message: 'You must be logged in to access this resource'});
     }

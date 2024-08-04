@@ -8,11 +8,6 @@ const path = require('path');
 const bodyParser = require('body-parser'); // Body parsing middleware
 require('dotenv').config();
 
-// TODO: Page doesn't seem to remember past login credentials after re-loading, 
-// but will not allow you to use a repeat username to register...
-//  Solved. Deleted and re-creted the database. Turns out my version of Redis 
-//  online isn't persistent.
-
 const app = express();
 const port = process.env.PORT || 3000; //Start the server on port 3000
 
@@ -76,6 +71,19 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 // Middleware to protect routes
 function requireLogin(req, res, next) {
+    //Print all users in database (temporary)
+    db.run('SELECT * FROM users', (err, users) => {
+        if(err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if(users) {
+            console.log("Users from database:")
+            users.forEach(user => {
+                console.log(user['name'], user['password']);
+            });
+        }
+    });
+
     if (!req.session.userId) {
         return res.status(401).json({ message: 'You must be logged in to access this resource'});
     }

@@ -4,6 +4,20 @@ function displayMessage(message) {
     messageElement.innerText = message;
 }
 
+// Function to toggle password visibility
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const toggle = input.nextElementSibling;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        toggle.textContent = 'Hide';
+    } else {
+        input.type = 'password';
+        toggle.textContent = 'Show';
+    }
+}
+
 // Event to register a user through API form submission
 document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -122,5 +136,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initial fetch of greetings
-    fetchGreetings();
+    //fetchGreetings();
 });

@@ -46,6 +46,41 @@ input[type="text"]::placeholder {
     font-style: italic;
 }
 
+input[type="password"] {
+    padding: 10px 20px;
+    margin: 10px 20px;
+    border: none;
+    background-color: #0c1568;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="password"]::placeholder {
+    color: rgb(224, 224, 224);
+    font-style: italic;
+}
+
+.password-container {
+    position: relative;
+    display: inline-block;
+}
+
+.password-container input {
+    box-sizing: border-box;
+}
+
+.toggle-password {
+    position: absolute;
+    font-size: 80%;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+    color: #e0e0e0;
+}
+
 button {
     padding: 4px 8px;
     background-color: #fff;

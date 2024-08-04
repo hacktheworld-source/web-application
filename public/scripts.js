@@ -16,19 +16,15 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     })
-    .then(response => {
-        if(!response.ok) {
-            return response.json().then(error => {
-                throw new Error(error.message);
-            });
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status !== 200) {
+            throw new Error(body.message || 'An error occurred');
         }
-        return response.json();
-    })
-    .then(data => {
-        displayMessage(data.message)
+        displayMessage(body.message);
     })
     .catch(error => {
-        displayMessage(error.message)
+        displayMessage(error.message);
     });
 });
 
@@ -38,25 +34,43 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
 
-    const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    });
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
 
-    const result = await response.json();
-    displayMessage(result.message);
+        const data = await response.json();
+        if(response.ok) {
+            displayMessage(data.message);
+        } else {
+            throw new Error(data.message || 'An error occurred');
+        }
+    } catch (error) {
+        displayMessage(result.message);
+    }
 });
 
 // Event to logout current user through API
 document.getElementById('logoutButton').addEventListener('click', async () => {
-    const response = await fetch('/api/logout', {
-        method: 'POST'
-    });
+    try {
+        const response = await fetch('/api/logout', {
+            method: 'POST'
+        });
 
-    const result = await response.json();
-    displayMessage(result.message);
+        const data = await response.json();
+        if (response.ok) {
+            displayMessage(data.message);
+        } else {
+            throw new Error(data.message || 'An error occured');
+        }
+    } catch (error) {
+        displayMessage(error.message);
+    }
 });
+
+// TODO: These 'Network response was not ok' error messages overwrite the more specific messages returned from server.js APIs
 
 document.addEventListener('DOMContentLoaded', function () {
     const greetForm = document.getElementById('greetForm');
@@ -75,14 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({ name })
         })
-        .then(response => {
-            if(!response.ok) {
-                throw new Error('Network response was not ok');
+        .then(response => response.json().then(data => ({ status: response.status, body: data }))) 
+        .then(({ status, body }) => {
+            if (status !== 201) {
+                throw new Error(body.message || 'An error occurred');
             }
-            return response.json();
-        })
-        .then(data => {
-            greetMessage.textContent = data.message;
+            greetMessage.textContent = body.message;
             fetchGreetings();
         })
         .catch(error => {
@@ -92,15 +104,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function fetchGreetings() {
         fetch('/api/greetings')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(({ status, body }) => {
+                if (status !== 200) {
+                    throw new Error(body.message || 'An error occurred');
                 }
-                return response.json();
-            })
-            .then(data => {
                 greetList.innerHTML = '';
-                data.forEach(greeting => {
+                body.forEach(greeting => {
                     const listItem = document.createElement('li');
                     listItem.textContent = `${greeting.name}: ${greeting.message}`;
                     greetList.appendChild(listItem);

@@ -26,7 +26,6 @@ app.use(bodyParser.json());
 let redisClient
 try {
     redisClient = new Redis(process.env.REDIS_URL);
-
     redisClient.on('error', (err) => {
         console.error('Redis error:', err);
         redisClient = null;

@@ -73,13 +73,10 @@ const db = new sqlite3.Database(dbPath, (err) => {
 function requireLogin(req, res, next) {
     //Print all users in database (temporary)
     db.run('SELECT * FROM users', (err, users) => {
-        if(err) {
-            return res.status(500).json({ error: err.message });
-        }
         if(users) {
             console.log("Users from database:")
             users.forEach(user => {
-                console.log(user['name'], user['password']);
+                console.log(user['username'], user['password']);
             });
         }
     });

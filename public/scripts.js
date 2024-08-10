@@ -62,7 +62,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             throw new Error(data.message || 'An error occurred');
         }
     } catch (error) {
-        displayMessage(result.message);
+        displayMessage(error.message);
     }
 });
 
@@ -84,8 +84,7 @@ document.getElementById('logoutButton').addEventListener('click', async () => {
     }
 });
 
-// TODO: These 'Network response was not ok' error messages overwrite the more specific messages returned from server.js APIs
-
+// Handle greet form
 document.addEventListener('DOMContentLoaded', function () {
     const greetForm = document.getElementById('greetForm');
     const greetInput = document.getElementById('greetInput');

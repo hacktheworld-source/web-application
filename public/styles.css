@@ -45,7 +45,7 @@ nav ul li a:hover {
 /* Ensure content starts below the nav bar */
 .container {
     background: #fff;
-    margin: 60px auto; /* Add top margin to clear the fixed nav */
+    margin: 60px;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -60,7 +60,7 @@ h1 {
 
 form {
     text-align: center;
-    margin: 0 auto;
+    margin: 20 auto;
     max-width: 400px; /* Constrains the form width */
 }
 

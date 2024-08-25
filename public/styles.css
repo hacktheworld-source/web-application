@@ -5,16 +5,17 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
+/* Navigation Bar Styling */
 nav {
     background-color: #333;
     padding: 10px 20px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensures the nav is on top of other content */
 }
 
 nav ul {
@@ -41,9 +42,10 @@ nav ul li a:hover {
     border-radius: 4px;
 }
 
+/* Ensure content starts below the nav bar */
 .container {
     background: #fff;
-    margin: 0;
+    margin: 60px auto; /* Add top margin to clear the fixed nav */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -60,32 +62,18 @@ form {
     margin-bottom: 20px;
 }
 
-input[type="text"] {
+/* Other input and form styling */
+input[type="text"], input[type="password"] {
     padding: 10px 20px;
-    margin: 10px 20px;
+    margin: 10px 0;
     border: none;
     background-color: #0c1568;
     color: white;
     border-radius: 4px;
-    cursor: pointer;
+    width: 100%;
 }
 
-input[type="text"]::placeholder {
-    color: rgb(224, 224, 224);
-    font-style: italic;
-}
-
-input[type="password"] {
-    padding: 10px 20px;
-    margin: 10px 20px;
-    border: none;
-    background-color: #0c1568;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-input[type="password"]::placeholder {
+input[type="text"]::placeholder, input[type="password"]::placeholder {
     color: rgb(224, 224, 224);
     font-style: italic;
 }
@@ -93,10 +81,12 @@ input[type="password"]::placeholder {
 .password-container {
     position: relative;
     display: inline-block;
+    width: 100%;
 }
 
 .password-container input {
     box-sizing: border-box;
+    width: 100%;
 }
 
 .toggle-password {

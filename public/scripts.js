@@ -19,28 +19,87 @@ function togglePassword(inputId) {
 }
 
 // Event to register a user through API form submission
-document.getElementById('registerForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const username = document.getElementById('registerUsername').value;
-    const password = document.getElementById('registerPassword').value;
-
-    fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json().then(data => ({ status: response.status, body: data })))
-    .then(({ status, body }) => {
-        if (status !== 200) {
-            throw new Error(body.message || 'An error occurred');
-        }
-        displayMessage(body.message);
-    })
-    .catch(error => {
-        displayMessage(error.message);
-    });
+document.addEventListener("DOMContentLoaded", function() {
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(registerForm);
+            const data = {
+                username: formData.get('username'),
+                password: formData.get('password')
+            };
+        
+            fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(({ status, body }) => {
+                if (status !== 200) {
+                    throw new Error(body.message || 'An error occurred');
+                }
+                displayMessage(body.message);
+            })
+            .catch(error => {
+                displayMessage(error.message);
+            });
+        });
+    }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Event to login user through API form submission
+    const loginForm = this.doctype.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    displayMessage(data.message);
+                } else {
+                    throw new Error(data.message || 'An error occurred');
+                }
+            } catch (error) {
+                displayMessage(error.message);
+            }
+        });
+    }
+
+    // Event to logout current user through API
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    displayMessage(data.message);
+                } else {
+                    throw new Error(data.message || 'An error occurred');
+                }
+            } catch (error) {
+                displayMessage(error.message);
+            }
+        });
+    }
+});
+
+/* OLD
 
 // Event to login user through API form submission
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -83,6 +142,7 @@ document.getElementById('logoutButton').addEventListener('click', async () => {
         displayMessage(error.message);
     }
 });
+*/
 
 // Handle greet form
 document.addEventListener('DOMContentLoaded', function () {
@@ -133,7 +193,4 @@ document.addEventListener('DOMContentLoaded', function () {
                 greetList.innerHTML = '<li>An error occurred while fetching greetings: ' + error.message + '</li>';
             });
     }
-
-    // Initial fetch of greetings
-    //fetchGreetings();
 });

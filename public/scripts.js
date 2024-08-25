@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 document.addEventListener("DOMContentLoaded", function() {
     // Event to login user through API form submission
-    const loginForm = this.doctype.getElementById('loginForm');
+    const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -151,46 +151,48 @@ document.addEventListener('DOMContentLoaded', function () {
     const greetMessage = document.getElementById('greetMessage');
     const greetList = document.getElementById('greetList');
 
-    greetForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const name = greetInput.value;
+    if (greetForm) {
+        greetForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const name = greetInput.value;
 
-        fetch('/api/greet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name })
-        })
-        .then(response => response.json().then(data => ({ status: response.status, body: data }))) 
-        .then(({ status, body }) => {
-            if (status !== 201) {
-                throw new Error(body.message || 'An error occurred');
-            }
-            greetMessage.textContent = body.message;
-            fetchGreetings();
-        })
-        .catch(error => {
-            greetMessage.textContent = 'An error occurred: ' + error.message;
-        });
-    });
-
-    function fetchGreetings() {
-        fetch('/api/greetings')
-            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            fetch('/api/greet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name })
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data }))) 
             .then(({ status, body }) => {
-                if (status !== 200) {
+                if (status !== 201) {
                     throw new Error(body.message || 'An error occurred');
                 }
-                greetList.innerHTML = '';
-                body.forEach(greeting => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${greeting.name}: ${greeting.message}`;
-                    greetList.appendChild(listItem);
-                });
+                greetMessage.textContent = body.message;
+                fetchGreetings();
             })
             .catch(error => {
-                greetList.innerHTML = '<li>An error occurred while fetching greetings: ' + error.message + '</li>';
+                greetMessage.textContent = 'An error occurred: ' + error.message;
             });
+        });
+
+        function fetchGreetings() {
+            fetch('/api/greetings')
+                .then(response => response.json().then(data => ({ status: response.status, body: data })))
+                .then(({ status, body }) => {
+                    if (status !== 200) {
+                        throw new Error(body.message || 'An error occurred');
+                    }
+                    greetList.innerHTML = '';
+                    body.forEach(greeting => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${greeting.name}: ${greeting.message}`;
+                        greetList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    greetList.innerHTML = '<li>An error occurred while fetching greetings: ' + error.message + '</li>';
+                });
+        }
     }
 });

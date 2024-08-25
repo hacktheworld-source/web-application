@@ -151,12 +151,12 @@ app.get('/', requireLogin, (req, res) => {
 
 // Serve Register Page
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'register.html'));
+    res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 // Serve Login Page
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 // Define a route to handle greeting submission

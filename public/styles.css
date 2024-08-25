@@ -15,7 +15,7 @@ nav {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ensures the nav is on top of other content */
+    z-index: 1000;
 }
 
 nav ul {
@@ -59,18 +59,20 @@ h1 {
 }
 
 form {
-    margin-bottom: 20px;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 400px; /* Constrains the form width */
 }
 
 /* Other input and form styling */
 input[type="text"], input[type="password"] {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    background-color: #0c1568;
-    color: white;
-    border-radius: 4px;
     width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 input[type="text"]::placeholder, input[type="password"]::placeholder {

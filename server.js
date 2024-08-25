@@ -144,9 +144,19 @@ app.post('/api/logout', (req, res) => {
 });
 
 
-// Define a route for the homepage
+// Serve Home Page
 app.get('/', requireLogin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Serve Register Page
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'register.html'));
+});
+
+// Serve Login Page
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 // Define a route to handle greeting submission

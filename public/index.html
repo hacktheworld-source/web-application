@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greeting App</title>
+    <title>Home</title>
     <link rel="stylesheet" href="styles.css">
     <!--
     OLD. New is a link to styles.css
@@ -40,32 +40,10 @@
         <p id="greetMessage"></p>
         <h2>All Greetings:</h2>
         <u1 id="greetList"></u1>
-
-        <h2>Register</h2>
-        <form id="registerForm">
-            <label for="registerUsername">Username:</label>
-            <input type="text" id="registerUsername" placeholder="Username" required>
-            <label for="registerPassword">Password:</label>
-            <div class="password-container">
-                <input type="password" id="registerPassword" placeholder="Password" required>
-                <span class="toggle-password" onclick="togglePassword('registerPassword')">Show</span>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-
-        <h2>Login</h2>
-        <form id="loginForm">
-            <label for="loginUsername">Username:</label>
-            <input type="text" id="loginUsername" placeholder="Username" required>
-            <label for="loginPassword">Password:</label>
-            <div class="password-container">
-                <input type="password" id="loginPassword" placeholder="Password" required>
-                <span class="toggle-password" onclick="togglePassword('loginPassword')">Show</span>
-            </div>
-            <button type="submit">Login</button>
-        </form>
-
-        <button id="logoutButton">Logout</button>
+        
+        <!-- Navigation Buttons -->
+        <button onclick="window.location.href='/register'">Register</button>
+        <button onclick="window.location.href='/login'">Login</button>
     </div>
 
     <p id="message"></p>
